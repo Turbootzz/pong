@@ -1,7 +1,11 @@
 class Game {
     constructor() {
-        console.log("Test Game");
+        //Verbinden met de pong canvas (moet elke frame opnieuw getekend worden)
+        this.canvas = document.getElementById("pong");
+        this.context = this.canvas.getContext("2d");
 
+        //bal object aanmaken
+        this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, 'orange');
 
         //bepaald de framerate (niet aller beste manier maar wel makkelijkste)
         // let me = this;
@@ -32,5 +36,11 @@ class Game {
 
     draw() {
         //console.log("draw")
+        this.drawRectangle(this.context, this.ball);
+    }
+
+    drawRectangle(ctx, rect, color = 'white') {
+        ctx.fillStyle = color;
+        ctx.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
     }
 }
