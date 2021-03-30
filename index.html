@@ -3,13 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Pong</title>
+	<title>Pong - Thijs Herman</title>
 	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 	<canvas id="hud"  width="800" height="480"></canvas>
 	<canvas id="pong" width="800" height="480"></canvas>
-	<script src="assets/js/polyfill.js"></script>
+	<script src="assets/js/polyfill.js"></script> <!-- if browser does not support -->
 	<script src="assets/js/label.js"></script>
 	<script src="assets/js/vector.js"></script>
 	<script src="assets/js/rectangle.js"></script>
@@ -19,7 +19,7 @@
 	<script src="assets/js/player.js"></script>
 	<script src="assets/js/game.js"></script>
 	<script>
-		const game;
+		const game = new Game();
 	</script>
 </body>
 </html>
