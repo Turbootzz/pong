@@ -9,5 +9,7 @@ class Ball extends Rectangle
         this.angle  = 0;
         this.locked = false;
         this.out    = false;
+        this.velocity.x = (getRandomNumBetween(0,1)===1) ? getRandomNumBetween(-50,-150) : getRandomNumBetween(50,150);   
+        this.velocity.y = (getRandomNumBetween(0,1)===1) ? getRandomNumBetween(-50,-150) : getRandomNumBetween(50,150);   
     }
 }
