@@ -111,8 +111,8 @@ class Game {
 
 
         //checks if ball hits the player
-        if(this.collide(ball, players[0], deltatime)) {
-            alert('bots!');
+        if(this.collide(ball, players[0], deltatime) || this.collide(ball, players[1], deltatime)) {
+            this.ball.velocity.x = -this.ball.velocity.x;
         }
 
 
