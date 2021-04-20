@@ -71,7 +71,21 @@ class Game {
                 player.velocity.y += (this.keys[40] === true) ? 400 : 0;
                 break;
             case 2:     // A.I player (right)
-                player.position.y = ball.position.y;
+                if (player.locked) {
+                    if (--player.stickyFrames === 0) {
+                        player.velocity.y = 0;
+                        player.locked = false;
+                        //console.log('unlock');
+                    }
+                    return;
+                } else {
+                    player.velocity.y = 0;
+                    player.velocity.y += ball.position.y < player.top ? -400 : 0;
+                    player.velocity.y += ball.position.y > player.bottom ? 400 : 0;
+                    player.stickyFrames = getRandomNumBetween(5, 20);
+                    player.locked = true;
+                    //console.log('lock');
+                }
                 break;
         }
     }
@@ -93,43 +107,89 @@ class Game {
     }
 
     checkCollisions(players, ball, edges, deltatime) {
-
-        for(let p=0; p<players.length; p++) {
-            if(players[p].top < edges[0].bottom) {
-                players[p].position.y = edges[0].size.y + (players[p].size.y/2);
-            }else if(players[p].bottom > edges[1].top) {
-                players[p].position.y = this.canvas.height - edges[1].size.y - (players[p].size.y/2);
+        //checks if the players hit the edge
+        for (let p = 0; p < players.length; p++) {
+            if (players[p].top < edges[0].bottom) {
+                players[p].position.y = edges[0].size.y + (players[p].size.y / 2);
+            } else if (players[p].bottom > edges[1].top) {
+                players[p].position.y = this.canvas.height - edges[1].size.y - (players[p].size.y / 2);
             }
         }
 
+        // Controleer of de bal de onderkant of de bovenkant raakt
+        if (ball.bottom > this.canvas.height - 10 || ball.top < 10) {
+            ball.velocity.y = -ball.velocity.y;
+        }
+
+        if (ball.out) return;
+        // Checks if the ball hits the player
+
+        // Checks if the ball is close to the players
+        if (ball.left + ball.velocity.y * deltatime < players[0].right || ball.right - ball.velocity.y * deltatime > players[1].left) {
+            // Checks which player is the focus
+            const player = ball.position.x < this.canvas.width / 2 ? players[0] : players[1];
+            // Checks where the collision will be (AABB)
+            if (this.collide(ball, player, deltatime)) {
+                // Checks if the collision is important
+                if (ball.bottom > player.top && ball.top < player.bottom) {
+                    console.log('Important collision detected');
+                    // Position de ball
+                    ball.position.x = player.id === 1 ? player.right + ball.size.y / 2 : player.left - ball.size.y / 2;
+                    // Lets it bounce on the x
+                    ball.velocity.x = -ball.velocity.x;
+            const ballY = ball.position.y | 0;
+            const playerY = player.position.y | 0;
+            const distance = ballY < playerY ? Math.abs(ballY - playerY) : -Math.abs(ballY - playerY);
+
+            console.log('afstand vanaf midden van bedje: ' + distance);
+
+            if (distance !== 0) ball.setAngle(player.id === 1 ? distance : -distance + 180);
+
+            Math.floor()
+            Math.random()
+            Math.ceil()
+            Math.PI
+
+            // Verhoog de snelheid van de bal met 10%
+            ball.setSpeed(ball.speed * 1.1);
+                    // Checks if the collison was from above
+                } else if (ball.position.y < player.position.y) {
+                    console.log('botsing aan de bovenkant van speler gedetecteerd');
+                    ball.position.y = player.top - ball.size.y / 2;
+                    ball.velocity.y = player.velocity.y < 0 && player.velocity.y < ball.velocity.y ? player.velocity.y * 1.1 : -ball.velocity.y;
+                    // Checks if the collison was from below
+                } else if (ball.position.y > player.position.y) {
+                    console.log('botsing aan de onderkant van speler gedetecteerd');
+                    ball.position.y = player.bottom + ball.size.y;
+                    ball.velocity.y = player.velocity.y > 0 && player.velocity.y > ball.velocity.y ? player.velocity.y * 1.1 : -ball.velocity.y;
+                }
+            }
         
 
-        //checks if the ball hits the top or the bottom.
-        if (this.ball.bottom > this.canvas.height-10 || this.ball.top < 10) {
-            this.ball.velocity.y = -this.ball.velocity.y;
+        // Checks when ball is out
+        if (ball.right < 0 || ball.left > this.canvas.width) {
+            this.hud.addScore(player.id === 1 ? 2 : 1);
+            ball.out = true;
+            setTimeout(() => {
+                this.ball.reset();
+            }, 1000);
         }
+    }
+        //Uitleg les
+        // 1=='1'    TRUE
+        // 1==='1'   FALSE
 
-
-        //checks if ball hits the player
-        if(this.collide(ball, players[0], deltatime) || this.collide(ball, players[1], deltatime)) {
-            this.ball.velocity.x = -this.ball.velocity.x;
-        }
-
-
-        //
+        // AND &&     <--- Beide voorwaarden moeten TRUE zijn, om TRUE terug te geven
+        // OR  ||     <--- Een van de voorwaarden moet TRUE zijn, om TRUE terug te krijgen
     }
 
     collide(rect1, rect2, dt) {
-        if (rect1.left   + rect1.velocity.x * dt < rect2.right  + rect2.velocity.x * dt &&
-            rect1.right  + rect1.velocity.x * dt > rect2.left   + rect2.velocity.x * dt &&
-            rect1.top    + rect1.velocity.y * dt < rect2.bottom + rect2.velocity.y * dt &&
-            rect1.bottom + rect1.velocity.y * dt > rect2.top    + rect2.velocity.y * dt) {
+        if (rect1.left + rect1.velocity.x * dt < rect2.right + rect2.velocity.x * dt && rect1.right + rect1.velocity.x * dt > rect2.left + rect2.velocity.x * dt && rect1.top + rect1.velocity.y * dt < rect2.bottom + rect2.velocity.y * dt && rect1.bottom + rect1.velocity.y * dt > rect2.top + rect2.velocity.y * dt) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-
 
 
     draw() {

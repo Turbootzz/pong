@@ -21,6 +21,24 @@ class Hud {
         this.draw();
     }
 
+    addScore(playerId) {
+        // Maak een variabele aan die het id van de speler die gescoord heeft gaat opslaan
+        // Die waarde kunnen we gebruiken voor het uitlezen van de array
+        const id = playerId === 1 ? 0 : 1;
+        // Maak een verwijzing naar de speler die waarvan de score met 1 moet worden opgehoogd
+        // Gebruik this.parent om bij de variabele this.players te komen van Class Game
+        this.parent.players[id].score++;
+        // Zorg dat het juiste scoreveld (label) wordt geselecteerd en roep de functie update aan
+        // Stuur de nieuwe score mee en zorg dat het een sctring-waarde is
+        if (id === 0) {
+            this.score1.update(String(this.parent.players[id].score));
+        } else if (id === 1) {
+            this.score2.update(String(this.parent.players[id].score));
+        }
+        // Roep de draw fucntie van Headsup-display aan
+        this.draw();
+    }
+
     draw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         // Teken hier de randen (this.edges) op het scherm
@@ -38,7 +56,5 @@ class Hud {
             let rectangle = this.score2.rectangles[r];
             this.parent.drawRectangle(this.context, rectangle, rectangle.color);
         }
-
-
     }
 }
