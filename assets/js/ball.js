@@ -1,21 +1,19 @@
 class Ball extends Rectangle
 {
-    constructor(x=0, y=0, color='white') {
-        super(x, y, 24, 24);
-        this.color  = color;
+    constructor(x=0, y=0, color) {
+        super(x, y, 24, 24, color);
         this.speed  = 0;
         this.startX = x;
         this.startY = y;
         this.angle  = 0;
         this.locked = false;
         this.out    = false;
-        this.velocity.x = (getRandomNumBetween(0,1)===1) ? getRandomNumBetween(-50,-150) : getRandomNumBetween(50,150);   
-        this.velocity.y = (getRandomNumBetween(0,1)===1) ? getRandomNumBetween(-50,-150) : getRandomNumBetween(50,150);   
+        this.reset();
     }
     reset(x=this.startX, y=this.startY) {
         this.setPosition(x, y);
         // voeg hier code aan toe die de snelheid van de ball instelt
-        this.setSpeed(150);
+        this.setSpeed(300);
         // voeg hier code aan toe die de hoek van de bal random gaat maken
         this.setAngle( getRandomNumBetween(1,2)===1 ? getRandomNumBetween(150,210) : getRandomNumBetween(330,390) );
         this.out = false;

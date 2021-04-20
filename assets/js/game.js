@@ -80,9 +80,9 @@ class Game {
                     return;
                 } else {
                     player.velocity.y = 0;
-                    player.velocity.y += ball.position.y < player.top ? -400 : 0;
-                    player.velocity.y += ball.position.y > player.bottom ? 400 : 0;
-                    player.stickyFrames = getRandomNumBetween(5, 20);
+                    player.velocity.y += ball.position.y < player.top ? -650 : 0;
+                    player.velocity.y += ball.position.y > player.bottom ? 650 : 0;
+                    player.stickyFrames = getRandomNumBetween(5, 15);
                     player.locked = true;
                     //console.log('lock');
                 }
@@ -109,16 +109,16 @@ class Game {
     checkCollisions(players, ball, edges, deltatime) {
         //checks if the players hit the edge
         for (let p = 0; p < players.length; p++) {
-            if (players[p].top < edges[0].bottom) {
-                players[p].position.y = edges[0].size.y + (players[p].size.y / 2);
-            } else if (players[p].bottom > edges[1].top) {
-                players[p].position.y = this.canvas.height - edges[1].size.y - (players[p].size.y / 2);
-            }
-        }
+			if (players[p].top < edges[0].bottom) {
+				players[p].position.y = edges[0].size.y + players[p].size.y / 2;
+			} else if (players[p].bottom > edges[1].top) {
+				players[p].position.y = this.canvas.height - edges[1].size.y - players[p].size.y / 2;
+			}
+		}
 
         // Controleer of de bal de onderkant of de bovenkant raakt
         if (ball.bottom > this.canvas.height - 10 || ball.top < 10) {
-            ball.velocity.y = -ball.velocity.y;
+			ball.velocity.y = -ball.velocity.y;
         }
 
         if (ball.out) return;
@@ -137,21 +137,22 @@ class Game {
                     ball.position.x = player.id === 1 ? player.right + ball.size.y / 2 : player.left - ball.size.y / 2;
                     // Lets it bounce on the x
                     ball.velocity.x = -ball.velocity.x;
-            const ballY = ball.position.y | 0;
-            const playerY = player.position.y | 0;
-            const distance = ballY < playerY ? Math.abs(ballY - playerY) : -Math.abs(ballY - playerY);
 
-            console.log('afstand vanaf midden van bedje: ' + distance);
+                    const ballY = ball.position.y | 0;
+                    const playerY = player.position.y | 0;
+                    const distance = ballY < playerY ? Math.abs(ballY - playerY) : -Math.abs(ballY - playerY);
 
-            if (distance !== 0) ball.setAngle(player.id === 1 ? distance : -distance + 180);
+                    console.log('afstand vanaf midden van bedje: ' + distance);
 
-            Math.floor()
-            Math.random()
-            Math.ceil()
-            Math.PI
+                    if (distance !== 0) ball.setAngle(player.id === 1 ? distance : -distance + 180);
 
-            // Verhoog de snelheid van de bal met 10%
-            ball.setSpeed(ball.speed * 1.1);
+                    Math.floor()
+                    Math.random()
+                    Math.ceil()
+                    Math.PI
+
+                    // Highers the speed by 10%
+                    ball.setSpeed(ball.speed * 1.1);
                     // Checks if the collison was from above
                 } else if (ball.position.y < player.position.y) {
                     console.log('botsing aan de bovenkant van speler gedetecteerd');
@@ -164,17 +165,17 @@ class Game {
                     ball.velocity.y = player.velocity.y > 0 && player.velocity.y > ball.velocity.y ? player.velocity.y * 1.1 : -ball.velocity.y;
                 }
             }
-        
 
-        // Checks when ball is out
-        if (ball.right < 0 || ball.left > this.canvas.width) {
-            this.hud.addScore(player.id === 1 ? 2 : 1);
-            ball.out = true;
-            setTimeout(() => {
-                this.ball.reset();
-            }, 1000);
+
+            // Checks when ball is out
+            if (ball.right < 0 || ball.left > this.canvas.width) {
+                this.hud.addScore(player.id === 1 ? 2 : 1);
+                ball.out = true;
+                setTimeout(() => {
+                    this.ball.reset();
+                }, 1000);
+            }
         }
-    }
         //Uitleg les
         // 1=='1'    TRUE
         // 1==='1'   FALSE

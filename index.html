@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Pong - Thijs Herman</title>
+
+	<meta property="og:title" content="">
+	<meta property="og:type" content="">
+	<meta property="og:url" content="">
+	<meta property="og:image" content="">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
 	<link rel="stylesheet" href="assets/css/style.css">
+
+	<meta name="theme-color" content="#fafafa">
 </head>
 <body>
-	<canvas id="hud"  width="800" height="480"></canvas>
-	<canvas id="pong" width="800" height="480"></canvas>
+	<div class="canvasdiv">
+	<canvas id="hud" width="800px" height="480" min-width="800px"></canvas>
+	<canvas id="pong" width="800px" height="480" min-width="800px"></canvas>
+</div>
 	<script src="assets/js/polyfill.js"></script> <!-- if browser does not support -->
 	<script src="assets/js/label.js"></script>
 	<script src="assets/js/vector.js"></script>
@@ -21,5 +36,7 @@
 	<script>
 		const game = new Game();
 	</script>
+	<script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+	<script src="assets/js/plugins.js"></script>
 </body>
 </html>
